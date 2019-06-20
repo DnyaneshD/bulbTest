@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/enzyme": "^3.9.3",
     "@types/jest": "^24.0.13",
+    "@types/mocha": "^5.2.7",
     "@types/react": "^16.8.7",
     "@types/react-dom": "^16.8.2",
     "@types/recharts": "^1.1.14",
@@ -34,10 +35,10 @@
     "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {
-    "@types/mocha": "^5.2.7",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "recharts": "^1.5.0"
+    "recharts": "^1.5.0",
+    "axios": "^0.18.0"
   },
   "prettier": {
     "singleQuote": true

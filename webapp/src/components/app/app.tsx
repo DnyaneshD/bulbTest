@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MeterReading } from '../meterReading/meterReading';
 import { EnergyUsageChart } from '../energyUsageChart/energyUsageChart';
 
-export const App = () => {
+const App = () => {
   return (
     <div>
       <EnergyUsageChart />
@@ -10,3 +10,5 @@ export const App = () => {
     </div>
   );
 };
+
+export default App;

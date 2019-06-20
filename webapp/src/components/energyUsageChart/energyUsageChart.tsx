@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as meterReadingsData from '../../data/meterReadingsSample.json';
+import axios, { AxiosResponse } from 'axios';
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 interface IMeterReadingData {
@@ -12,6 +12,10 @@ interface IMeterReadingState {
   energyUsageData: IMeterReadingData[];
 }
 
+interface IResponse {
+  electricity: IMeterReadingData[];
+}
+
 export class EnergyUsageChart extends React.PureComponent<
   {},
   IMeterReadingState
@@ -19,9 +23,18 @@ export class EnergyUsageChart extends React.PureComponent<
   state = { energyUsageData: [] };
 
   public componentDidMount() {
-    this.setState({
-      energyUsageData: this.calculateEnergyUsage(meterReadingsData.electricity)
-    });
+    return axios
+      .get(
+        'https://storage.googleapis.com/bulb-interview/meterReadingsReal.json'
+      )
+      .then((response: AxiosResponse<IResponse>) => {
+        this.setState({
+          energyUsageData: this.calculateEnergyUsage(response.data.electricity)
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   public render() {
@@ -44,15 +57,18 @@ export class EnergyUsageChart extends React.PureComponent<
   public calculateEnergyUsage(
     readings: IMeterReadingData[]
   ): IMeterReadingData[] {
+    if (readings.length <= 0) {
+      return [];
+    }
+
     const data = [];
-    if (readings.length > 0) {
-      for (let i = 0; i < readings.length - 2; i++) {
-        const energyUsage = readings[i + 1].cumulative - readings[i].cumulative;
-        data.push({
-          date: readings[i + 1].readingDate,
-          energyUsage
-        });
-      }
+
+    for (let i = 0; i < readings.length - 2; i++) {
+      const energyUsage = readings[i + 1].cumulative - readings[i].cumulative;
+      data.push({
+        date: readings[i + 1].readingDate,
+        energyUsage
+      });
     }
     return data;
   }

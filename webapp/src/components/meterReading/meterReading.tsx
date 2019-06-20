@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as meterReadingsData from '../../data/meterReadingsSample.json';
+import axios, { AxiosResponse } from 'axios';
 import { MeterReadingRow } from '../meterReadingRow/meterReadingRow';
 
 interface IMeterReadingData {
@@ -12,11 +12,24 @@ interface IMeterReadingState {
   readings: IMeterReadingData[];
 }
 
+interface IResponse {
+  electricity: IMeterReadingData[];
+}
+
 export class MeterReading extends React.PureComponent<{}, IMeterReadingState> {
   state = { readings: [] };
 
   public componentDidMount() {
-    this.setState({ readings: meterReadingsData.electricity });
+    axios
+      .get(
+        'https://storage.googleapis.com/bulb-interview/meterReadingsReal.json'
+      )
+      .then((response: AxiosResponse<IResponse>) => {
+        this.setState({ readings: response.data.electricity });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   public render() {

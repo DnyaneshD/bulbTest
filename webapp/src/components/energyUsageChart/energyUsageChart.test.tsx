@@ -1,14 +1,25 @@
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { EnergyUsageChart } from './energyUsageChart';
-import { shallow } from 'enzyme';
 import { BarChart } from 'recharts';
+import { shallow } from 'enzyme';
+import axios, { AxiosResponse } from 'axios';
+import { EnergyUsageChart } from './energyUsageChart';
+
+jest.mock('axios');
+const mockAxios = axios as jest.Mocked<typeof axios>;
 
 describe('EnergyUsageChart', () => {
+  beforeAll(() => {
+    mockAxios.get.mockResolvedValue({
+      data: {
+        electricity: []
+      }
+    } as AxiosResponse);
+  });
+
   it('renders without crashing', () => {
-    const table = document.createElement('div');
-    ReactDOM.render(<EnergyUsageChart />, table);
-    ReactDOM.unmountComponentAtNode(table);
+    const div = document.createElement('div');
+    ReactDOM.render(<EnergyUsageChart />, div);
   });
 
   it('renders one <BarChart /> components', () => {
@@ -16,12 +27,45 @@ describe('EnergyUsageChart', () => {
     expect(wrapper.find(BarChart)).toHaveLength(1);
   });
 
-  it('calculateEnergyUsage', () => {
+  it('test API call', () => {
+    //Arrange
+    const getSpy = jest.spyOn(mockAxios, 'get');
+    mockAxios.get.mockResolvedValue({
+      data: {
+        electricity: [
+          {
+            cumulative: 17580,
+            readingDate: '2017-03-28T00:00:00.000Z',
+            unit: 'kWh'
+          },
+          {
+            cumulative: 17759,
+            readingDate: '2017-04-15T00:00:00.000Z',
+            unit: 'kWh'
+          }
+        ]
+      }
+    } as AxiosResponse);
+
+    //Act
+    shallow(<EnergyUsageChart />);
+
+    //Assert
+    expect(getSpy).toBeCalled();
+    expect(mockAxios.get).toHaveBeenCalledTimes(1);
+    expect(mockAxios.get).toHaveBeenCalledWith(
+      'https://storage.googleapis.com/bulb-interview/meterReadingsReal.json'
+    );
+  });
+});
+
+describe('EnergyUsageChart --> calculateEnergyUsage ', () => {
+  it('with []', () => {
     const energyUsageChartObject = new EnergyUsageChart({});
     expect(energyUsageChartObject.calculateEnergyUsage([])).toEqual([]);
   });
 
-  it('calculateEnergyUsage', () => {
+  it('with valid data', () => {
     const energyUsageChartObject = new EnergyUsageChart({});
     const data = energyUsageChartObject.calculateEnergyUsage([
       {
