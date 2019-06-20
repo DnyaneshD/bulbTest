@@ -30,15 +30,15 @@ export class MeterReading extends React.PureComponent<{}, IMeterReadingState> {
               <th>Reading</th>
               <th>Unit</th>
             </tr>
+            {this.state.readings.map(reading => (
+              <MeterReadingRow
+                key={reading.readingDate}
+                cumulative={reading.cumulative}
+                readingDate={reading.readingDate}
+                unit={reading.unit}
+              />
+            ))}
           </tbody>
-          {this.state.readings.map(reading => (
-            <MeterReadingRow
-              key={reading.readingDate}
-              cumulative={reading.cumulative}
-              readingDate={reading.readingDate}
-              unit={reading.unit}
-            />
-          ))}
         </table>
       </div>
     );

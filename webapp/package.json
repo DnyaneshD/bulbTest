@@ -14,11 +14,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/enzyme": "^3.9.3",
     "@types/jest": "^24.0.13",
     "@types/react": "^16.8.7",
     "@types/react-dom": "^16.8.2",
     "@types/recharts": "^1.1.14",
     "css-loader": "^0.28.7",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.1.0",
@@ -38,5 +41,9 @@
   },
   "prettier": {
     "singleQuote": true
-  }
+  },
+  "setupFiles": [
+    "<rootDir>/src/setupTests.js"
+  ],
+  "setupTestFrameworkScriptFile": "<rootDir>/src/setupTests.js"
 }

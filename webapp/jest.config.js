@@ -1,7 +1,8 @@
 module.exports = {
-  preset: "ts-jest",
+  preset: 'ts-jest',
   verbose: true,
   moduleNameMapper: {
-    "\\.(css|scss)$": "identity-obj-proxy"
-  }
+    '\\.(css|scss)$': 'identity-obj-proxy'
+  },
+  setupFiles: ['<rootDir>/src/setupTests.ts']
 };

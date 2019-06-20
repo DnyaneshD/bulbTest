@@ -9,30 +9,23 @@ interface IMeterReadingData {
 }
 
 interface IMeterReadingState {
-  readings: IMeterReadingData[];
+  energyUsageData: IMeterReadingData[];
 }
 
 export class EnergyUsageChart extends React.PureComponent<
   {},
   IMeterReadingState
 > {
-  state = { readings: [] };
+  state = { energyUsageData: [] };
 
   public componentDidMount() {
-    this.setState({ readings: meterReadingsData.electricity });
+    this.setState({
+      energyUsageData: this.calculateEnergyUsage(meterReadingsData.electricity)
+    });
   }
 
   public render() {
-    const { readings } = this.state;
-
-    const energyUsageData = [];
-    for (let i = 0; i < readings.length - 2; i++) {
-      const energyUsage = readings[i + 1].cumulative - readings[i].cumulative;
-      energyUsageData.push({
-        date: readings[i + 1].readingDate,
-        energyUsage
-      });
-    }
+    const { energyUsageData } = this.state;
 
     return (
       <div>
@@ -46,5 +39,21 @@ export class EnergyUsageChart extends React.PureComponent<
         </BarChart>
       </div>
     );
+  }
+
+  public calculateEnergyUsage(
+    readings: IMeterReadingData[]
+  ): IMeterReadingData[] {
+    const data = [];
+    if (readings.length > 0) {
+      for (let i = 0; i < readings.length - 2; i++) {
+        const energyUsage = readings[i + 1].cumulative - readings[i].cumulative;
+        data.push({
+          date: readings[i + 1].readingDate,
+          energyUsage
+        });
+      }
+    }
+    return data;
   }
 }
