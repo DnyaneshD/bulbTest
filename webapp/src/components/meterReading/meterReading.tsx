@@ -1,5 +1,6 @@
 import * as React from 'react';
 import axios, { AxiosResponse } from 'axios';
+import styled from 'styled-components';
 import { MeterReadingRow } from '../meterReadingRow/meterReadingRow';
 
 interface IMeterReadingData {
@@ -33,10 +34,15 @@ export class MeterReading extends React.PureComponent<{}, IMeterReadingState> {
   }
 
   public render() {
+    const Table = styled.table`
+      align: center;
+      border: 1px solid black;
+    `;
+
     return (
       <div>
         <h2>Meter Readings</h2>
-        <table>
+        <Table>
           <tbody>
             <tr>
               <th>Date</th>
@@ -52,7 +58,7 @@ export class MeterReading extends React.PureComponent<{}, IMeterReadingState> {
               />
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
     );
   }
