@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { dateFormatter } from '../../helper/formatDateTime';
+import * as moment from 'moment';
 
 interface IMeterReadingRow {
   readingDate: string;
@@ -10,7 +10,7 @@ interface IMeterReadingRow {
 export const MeterReadingRow = (props: IMeterReadingRow) => {
   return (
     <tr key={props.readingDate}>
-      <td>{dateFormatter(props.readingDate)}</td>
+      <td>{moment(props.readingDate).format('ll')}</td>
       <td>{props.cumulative}</td>
       <td>{props.unit}</td>
     </tr>

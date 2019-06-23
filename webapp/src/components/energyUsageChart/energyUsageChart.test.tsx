@@ -14,7 +14,7 @@ describe('EnergyUsageChart', () => {
       data: {
         electricity: []
       }
-    } as AxiosResponse);
+    } as any);
   });
 
   it('renders without crashing', () => {
@@ -45,7 +45,26 @@ describe('EnergyUsageChart', () => {
           }
         ]
       }
-    } as AxiosResponse);
+    } as any);
+
+    jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        data: {
+          electricity: [
+            {
+              cumulative: 17580,
+              readingDate: '2017-03-28T00:00:00.000Z',
+              unit: 'kWh'
+            },
+            {
+              cumulative: 17759,
+              readingDate: '2017-04-15T00:00:00.000Z',
+              unit: 'kWh'
+            }
+          ]
+        }
+      } as AxiosResponse)
+    );
 
     //Act
     shallow(<EnergyUsageChart />);
@@ -56,34 +75,5 @@ describe('EnergyUsageChart', () => {
     expect(mockAxios.get).toHaveBeenCalledWith(
       'https://storage.googleapis.com/bulb-interview/meterReadingsReal.json'
     );
-  });
-});
-
-describe('EnergyUsageChart --> calculateEnergyUsage ', () => {
-  it('with []', () => {
-    const energyUsageChartObject = new EnergyUsageChart({});
-    expect(energyUsageChartObject.calculateEnergyUsage([])).toEqual([]);
-  });
-
-  it('with valid data', () => {
-    const energyUsageChartObject = new EnergyUsageChart({});
-    const data = energyUsageChartObject.calculateEnergyUsage([
-      {
-        cumulative: 17600,
-        readingDate: '2017-03-31T00:00:00.000Z',
-        unit: 'kWh'
-      },
-      {
-        cumulative: 17600,
-        readingDate: '2017-03-31T00:00:00.000Z',
-        unit: 'kWh'
-      },
-      {
-        cumulative: 17600,
-        readingDate: '2017-03-31T00:00:00.000Z',
-        unit: 'kWh'
-      }
-    ]);
-    expect(data.length).toBe(1);
   });
 });

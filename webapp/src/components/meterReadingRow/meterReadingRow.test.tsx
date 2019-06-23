@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { shallow, mount } from 'enzyme';
 import { MeterReadingRow } from './meterReadingRow';
+import moment = require('moment');
 
 describe('MeterReadingRow', () => {
   it('renders without crashing', () => {
@@ -9,7 +10,7 @@ describe('MeterReadingRow', () => {
     ReactDOM.render(
       <tbody>
         <MeterReadingRow
-          key={new Date().toString()}
+          key={moment(new Date()).format()}
           cumulative={0}
           readingDate={''}
           unit=""
@@ -23,7 +24,7 @@ describe('MeterReadingRow', () => {
   it('renders three <td /> components', () => {
     const wrapper = shallow(
       <MeterReadingRow
-        key={new Date().toString()}
+        key={moment(new Date()).format()}
         cumulative={0}
         readingDate={''}
         unit=""
@@ -35,9 +36,9 @@ describe('MeterReadingRow', () => {
   it('props rendered correctly', () => {
     const wrapper = mount(
       <MeterReadingRow
-        key={new Date().toString()}
+        key={moment(new Date()).format()}
         cumulative={5}
-        readingDate={new Date().toString()}
+        readingDate={moment(new Date()).format()}
         unit="5"
       />
     );

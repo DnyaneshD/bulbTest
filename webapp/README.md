@@ -11,6 +11,5 @@ Following things I could achieve:
 
 Following things can be improved :
 
-- Get rid of compile time error because of 'expect' in ject, there are such 19 errors
 - More unit test can be added
 - Components can be styled in even better way
